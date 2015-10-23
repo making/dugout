@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import dugout.core.ScenarioExecutor;
 import dugout.core.ScenarioInvoker;
+import dugout.spring.JsonPathDocumentContextHttpMessageConverter;
 import dugout.spring.JsoupDocumentHttpMessageConverter;
 
 @Configuration
@@ -43,6 +44,8 @@ public class DugoutConfiguration {
 		Logger log = LoggerFactory.getLogger("httptrace");
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getMessageConverters().add(new JsoupDocumentHttpMessageConverter());
+		restTemplate.getMessageConverters()
+				.add(new JsonPathDocumentContextHttpMessageConverter());
 		restTemplate.getInterceptors().add((req, body, execution) -> {
 			if (log.isInfoEnabled()) {
 				log.info("Req URI    : " + req.getURI());

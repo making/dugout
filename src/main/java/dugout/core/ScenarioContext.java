@@ -27,6 +27,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.jayway.jsonpath.DocumentContext;
+
 @Slf4j
 public class ScenarioContext {
 	private final Attr attr = new Attr();
@@ -252,6 +254,12 @@ public class ScenarioContext {
 		public ResponseVerificationPhase<Document> responseAsDocument() {
 			ResponseEntity<Document> res = ScenarioContext.this.restTemplate
 					.exchange(buildRequestEntity(), Document.class);
+			return new ResponseVerificationPhase<>(res);
+		}
+
+		public ResponseVerificationPhase<DocumentContext> responseAsJson() {
+			ResponseEntity<DocumentContext> res = ScenarioContext.this.restTemplate
+					.exchange(buildRequestEntity(), DocumentContext.class);
 			return new ResponseVerificationPhase<>(res);
 		}
 
