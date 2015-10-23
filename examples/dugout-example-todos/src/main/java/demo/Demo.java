@@ -4,8 +4,6 @@ import java.util.Random;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +19,6 @@ public class Demo {
 		SpringApplication.run(Demo.class, args);
 	}
 
-	@Order(0)
 	@Component
 	public static class TopPageScenario implements Scenario {
 		@Override
@@ -35,7 +32,6 @@ public class Demo {
 		}
 	}
 
-	@Order(1)
 	@Component
 	public static class ListPageScenario implements Scenario {
 		@Override
@@ -56,7 +52,6 @@ public class Demo {
 		}
 	}
 
-	@Order(2)
 	@Component
 	public static class CreateScenario implements Scenario {
 		Random random = new Random(System.currentTimeMillis());
@@ -94,7 +89,6 @@ public class Demo {
 		}
 	}
 
-	@Order(Ordered.HIGHEST_PRECEDENCE)
 	@Component
 	public static class CleanupScenario implements Scenario {
 		@Override
