@@ -11,9 +11,9 @@ import dugout.core.ScenarioContext;
 
 @SpringBootApplication
 @DugoutApplication
-public class App {
+public class Demo {
 	public static void main(String[] args) {
-		SpringApplication.run(App.class, args);
+		SpringApplication.run(Demo.class, args);
 	}
 
 	@Component
