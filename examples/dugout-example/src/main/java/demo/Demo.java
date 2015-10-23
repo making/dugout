@@ -17,16 +17,16 @@ public class Demo {
 	}
 
 	@Component
-	public static class BeerScenario implements Scenario {
+	public static class ExampleScenario implements Scenario {
 		@Override
 		public ScenarioContext exec(ScenarioContext context) {
 			return context.request().get(context.attr().str("path")).responseAsDocument()
-					.assertThatStringOfBody(doc -> doc.select("#gallery").text(),
-							that -> that.isEqualTo("Loading..."))
-					.assertThatStatusCode(that -> that.isEqualTo(HttpStatus.OK))
-					.assertThatString(res -> res.getHeaders().getFirst("X-Cf-Requestid"),
-							that -> that.hasSize(36))
-					.then();
+					.logBody().assertThatStatusCode(that -> that.isEqualTo(HttpStatus.OK))
+					.assertThatStringOfBody(doc -> doc.title(),
+							that -> that.isEqualTo("Example Domain"))
+					.assertThatStringOfBody(doc -> doc.select("h1").text(),
+							that -> that.isEqualTo("Example Domain"))
+					.finish();
 		}
 	}
 }
