@@ -65,9 +65,15 @@ public class ScenarioContext {
 			return ScenarioContext.this;
 		}
 
-		public ScenarioContext transfer(Consumer<ResponseEntity<T>> consumer) {
+		public ResponseVerificationPhase<T> transfer(
+				Consumer<ResponseEntity<T>> consumer) {
 			consumer.accept(this.responseEntity);
-			return ScenarioContext.this;
+			return this;
+		}
+
+		public ResponseVerificationPhase<T> transferFromBody(Consumer<T> consumer) {
+			consumer.accept(this.responseEntity.getBody());
+			return this;
 		}
 
 		public ResponseVerificationPhase<T> transferCookie() {
