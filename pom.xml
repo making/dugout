@@ -19,6 +19,38 @@
         <!-- lookup parent from repository -->
     </parent>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/making/dugout</url>
+        <connection>scm:git:git@github.com:making/dugout.git</connection>
+        <developerConnection>scm:git:git@github.com:making/dugout.git</developerConnection>
+    </scm>
+    <url>https://github.com/making/dugout</url>
+    <developers>
+        <developer>
+            <id>making</id>
+            <name>Toshiaki Maki</name>
+            <email>makingx@gmail.com</email>
+            <url>https://twitter.com/making</url>
+        </developer>
+    </developers>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
