@@ -31,7 +31,7 @@ public class Demo {
 					.assertThatStatusCode(that -> that.isEqualTo(HttpStatus.FOUND))
 					.transfer(res -> context.attr().put("location",
 							res.getHeaders().getLocation().toString()))
-					.then();
+					.finish();
 		}
 	}
 
@@ -42,7 +42,7 @@ public class Demo {
 		public ScenarioContext exec(ScenarioContext context) {
 			Attr attr = context.attr();
 			return context.request("=============================== Check Todo List")
-					.get(attr.str("location")).responseAsDocument().logBody()
+					.get(attr.str("path") + "/todo/list").responseAsDocument().logBody()
 					.assertThatStatusCode(that -> that.isEqualTo(HttpStatus.OK))
 					.assertThatStringOfBody(doc -> doc.title(),
 							that -> that.isEqualTo("Todo List"))
@@ -50,11 +50,9 @@ public class Demo {
 							that -> that.isEqualTo("Todo List"))
 					.assertThatBody(doc -> doc.select("#todoForm > form").size(),
 							that -> that.isEqualTo(1))
-					.transferFromBody(
-							doc -> attr.put("action", doc.select("form").attr("action")))
 					.assertThatBody(doc -> doc.select("#todoList").size(),
 							that -> that.isEqualTo(1))
-					.then();
+					.finish();
 		}
 	}
 
@@ -68,16 +66,21 @@ public class Demo {
 			Attr attr = context.attr();
 			int r = random.nextInt();
 			return context.request("=============================== Create Todo")
-					.post(attr.str("path") + attr.str("action"))
+					.post(attr.str("path") + "/todo/create")
 					.form(f -> f.param("todoTitle", "Hello World " + r))
 					.responseAsDocument().logBody()
 					.assertThatStatusCode(that -> that.isEqualTo(HttpStatus.FOUND))
-					.assertThatString(res -> res.getHeaders().getLocation().toString(),
-							that -> that.startsWith(attr.str("location")))
-					.transfer(res -> attr.put("r", r)).transferCookie().then()
+					.transfer(res -> attr.put("r", r))
+					.transfer(res -> attr.put("location",
+							res.getHeaders().getLocation().toString()))
+					.transferCookie().then()
 					.request("====================================== Redirected")
 					.get(attr.str("location")).responseAsDocument().logBody()
 					.assertThatStatusCode(that -> that.isEqualTo(HttpStatus.OK))
+					.assertThatStringOfBody(doc -> doc.title(),
+							that -> that.isEqualTo("Todo List"))
+					.assertThatStringOfBody(doc -> doc.select("h1").text(),
+							that -> that.isEqualTo("Todo List"))
 					.assertThatStringOfBody(
 							doc -> doc.select(".alert-success > span").text(),
 							that -> that.isEqualTo(
@@ -87,7 +90,7 @@ public class Demo {
 									.equals("Hello World "
 											+ attr.get("r", Integer.class)))
 							.count(), that -> that.isEqualTo(1L))
-					.then();
+					.finish();
 		}
 	}
 
@@ -96,7 +99,7 @@ public class Demo {
 	public static class CleanupScenario implements Scenario {
 		@Override
 		public ScenarioContext exec(ScenarioContext context) {
-			context.request("============================== CleanUp")
+			return context.request("============================== CleanUp")
 					.get(context.attr().str("path") + "/todo/list").responseAsDocument()
 					.transferFromBody(doc -> {
 						doc.select("form[action=/todo/delete] > input[name=todoId]")
@@ -107,7 +110,6 @@ public class Demo {
 									.responseAsDocument().logBody();
 						});
 					}).finish();
-			return context;
 		}
 	}
 }
